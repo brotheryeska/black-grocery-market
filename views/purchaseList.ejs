@@ -1,0 +1,22 @@
+<%-include ('./partials/header')%>
+<a class="btn btn-primary" href="/user/<%=selectedUser.id%>/edit" role="button">Edit Profile</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row"><%=purchase.Products.name_product%></td>
+        <td scope="row"><%=purchase.quantity%></td>
+        <td scope="row"><%=purchase.Products.price%></td>
+        <td scope="row"><%=purchase.total_price%></td>
+       </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-primary" onclick="return confirm('Click Ok to continue deactive account')" href="/user/<%=selectedUser.id%>/delete" role="button">Deactive Account</a>
+<%-include ('./partials/footer')%>

@@ -1,0 +1,20 @@
+<%-include ('./partials/header')%>
+<a class="btn btn-primary" href="/user/<%=selectedUser.id%>/edit" role="button">Edit Profile</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row"><%=selectedUser.full_name%></td>
+        <td scope="row"><%=selectedUser.email%></td>
+        <td scope="row"><%=selectedUser.role%></td>
+       </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-primary" onclick="return confirm('Click Ok to continue deactive account')" href="/user/<%=selectedUser.id%>/delete" role="button">Deactive Account</a>
+<%-include ('./partials/footer')%>

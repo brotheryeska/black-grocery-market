@@ -6,9 +6,9 @@ const transaction = require('./transactionRoute')
 router.get('/', (req, res) => {
     res.render('homepage')
 })
-router.get('/product', product)
-router.get('/user', user)
-router.get('/transaction', transaction)
+router.use('/product', product)
+router.use('/user', user)
+router.use('/transaction', transaction)
 
 
 module.exports = router

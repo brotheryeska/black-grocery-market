@@ -19,6 +19,8 @@ router.post('/edit', roleUser, controller.postUpdate)
 //deactive user + middleware
 router.get('/delete', roleUser, controller.deleteUser) //done
 
+router.get('/check-out', roleUser, controller.checkOut)
+
 //see spesific product
 router.get('/detail/:id', controller.viewDetail)
 

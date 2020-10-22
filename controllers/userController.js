@@ -190,6 +190,25 @@ class Controller {
         })
     }
 
+    static checkOut (req, res) {
+        const id = req.session.payload.UserId
+        Transaction.destroy({
+            where: {
+                UserId : id
+            }
+        })
+        .then(data => {
+            res.redirect(`/user/?alert=You're Purchase has been made`)
+        })
+        .catch(err => {
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
+        })
+    }
+
 }
 
 module.exports = Controller

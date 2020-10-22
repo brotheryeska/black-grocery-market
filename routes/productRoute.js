@@ -8,7 +8,8 @@ router.get('/', controller.allProduct)
 router.get('/detail/:id', controller.viewDetail)
 
 //add item to cart
-// router.get('/:id/add-item', controller.getAddProduct)
+router.get('/:id/add-item', controller.getAddProduct)
 // router.post('/:id/add-item', controller.postAddProduct)
+router.get('/:id/delete-item', controller.deleteProductTrx)
 
 module.exports = router

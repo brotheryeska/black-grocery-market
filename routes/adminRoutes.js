@@ -16,7 +16,7 @@ router.get('/restock/:id', roleAdmin, controller.restockForm)
 router.post('/restock/:id', roleAdmin, controller.postRestock) 
 
 //delete stock for role admin + middleware 
-router.get('/deleteProduct/', roleAdmin, controller.destroyItem)
+router.get('/deleteProduct/:id', roleAdmin, controller.destroyItem)
 
 
 

@@ -97,15 +97,18 @@ class Controller{
 
 
     static postRestock (req,res) {
-        const formValue = {
-            name_product: req.body.name_product,
-            stock: +req.body.stock
-        }
         const id = +req.params.id
-        Product.update(formValue, {
-            where: {
-                id: id
+        Product.findByPk(id)
+        .then(data => {
+            const formValue = {
+                name_product: req.body.name_product,
+                stock: +req.body.stock + data.stock
             }
+            return Product.update(formValue, {
+                where: {
+                    id: id
+                }
+            })
         })
         .then(data => {
             res.redirect('/admin/product?alert=sucess add product')
@@ -121,13 +124,13 @@ class Controller{
         const role = req.session.payload.role
         const id = +req.params.id
         if(role == 'admin'){
-            Product.findByPk({
+            Product.destroy({
                 where: {
-                    id:id
+                    id: id
                 }
             })
             .then(deletedItem => {
-                res.redirect('/product?alert=Sucess delete product')
+                res.redirect('/admin/product?alert=Sucess delete product')
             })
             .catch(err => {
                 res.send(err)

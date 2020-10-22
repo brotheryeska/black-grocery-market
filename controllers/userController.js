@@ -87,7 +87,6 @@ class Controller {
     }
 
     static viewDetail(req, res) {
-        //see spesific product
         Product.findByPk(req.params.id)
             .then(data => {
                 res.render("./user/detailFlower", { products: data })
@@ -95,8 +94,9 @@ class Controller {
             .catch((err) => res.send(err))
     }
 
+
     static getAddProduct(req, res) {
-        //get url form product sm quantity
+
         let session = req.session.payload
 
         let payload = {
@@ -109,22 +109,26 @@ class Controller {
             where: {
                 ProductId: payload.ProductId,
                 UserId: session.UserId
-            }
+            }, include: Product
         })
             .then(data => {
                 if (!data) {
                     return Transaction.create(payload)
                 }
                 else if (data) {
-
+                    console.log(data.Product.stock)
                     let harga = data.total_price / data.quantity
+                    console.log(currentStock)
                     data.total_price += harga
                     data.quantity++
+                    
                     data.save()
                     return data
                 }
             })
             .then(data => {
+                let currentStock = data.Product.stock - 1
+                data.Product.stock = currentStock
                 res.redirect('/user/product')
             })
             .catch(err => {
@@ -136,13 +140,19 @@ class Controller {
     
 
     static deleteProductTrx(req, res) {
-
+        const id = +req.params.id
+        Transaction.findByPk({
+            where: {
+                id: id
+            }
+        })
+        .then(data => {
+            res.redirect('/user/product?alert=sucess delete from cart')
+        })
+        .catch(err => {
+            res.send(err)
+        })
     }
-
-    // static postAddProduct (req,res) {
-    //     //post to db transaction
-    // }
-
 
 }
 

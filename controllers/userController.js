@@ -2,37 +2,15 @@ const {User, Product, Transaction} = require('../models/index')
 
 class Controller {
 
-
-    static welcomePage(req,res){
-        res.render('homepage-session')
+    static welcomePage(req, res){
+        res.render("./user/homepage")
     }
-
-    static signUpForm(req,res) {
-        res.render('signUpForm')
-    }
-
-    static postRegistration (req,res) {
-        const formValue = {
-            full_name: req.body.full_name,
-            role: req.body.role,
-            email: req.body.email,
-            password: req.body.password
-        }
-        User.create(formValue)
-        .then(data => {
-            res.redirect('/user')
-        })
-        .catch(err => {
-            res.send(err)
-        })
-    }
-
 
     static viewProfile(req,res) {
         const id = +req.session.payload.UserId
         User.findByPk(id)
         .then(selectedUser=> {
-            res.render('viewProfile', {selectedUser})
+            res.render('./user/viewProfile', {selectedUser})
         })
         .catch(err => {
             res.send(err)
@@ -44,7 +22,7 @@ class Controller {
         const id = +req.session.payload.UserId
         User.findByPk(id)
         .then(selectedUser=> {
-            res.render('editProfile', {selectedUser})
+            res.render('./user/editProfile', {selectedUser})
         })
         .catch(err => {
             res.send(err)
@@ -89,117 +67,82 @@ class Controller {
         })
     }
 
-    static viewCart (req,res) {
-        const id = +req.session.payload.UserId
-        Transaction.findAll({
-            where: {
-                UserId: id
-            },
-            include: Product
-        })
-        .then(purchase => {
-            res.render('purchaseList', {purchase})
-        })
-        .catch(err => {
-            res.send(err)
-        })
+    static allProduct(req, res) {
+        let session = req.session.payload.UserId
+        let products
+        Product.findAll()
+            .then((data) => {
+                products = data
+                return Transaction.findAll({
+                    include: Product,
+                    where: {
+                        UserId: session
+                    }
+                })
+            })
+            .then(trx => {
+                res.render("./user/allProduct", { products, trx })
+            })
+            .catch((err) => res.send(err))
     }
 
-    static getSignIn (req,res) {
-        res.render('logInPage')
+    static viewDetail(req, res) {
+        //see spesific product
+        Product.findByPk(req.params.id)
+            .then(data => {
+                res.render("./user/detailFlower", { products: data })
+            })
+            .catch((err) => res.send(err))
     }
 
-    static postSignIn(req,res) {
-        const formValue = {
-            email: req.body.email,
-            password: req.body.password
+    static getAddProduct(req, res) {
+        //get url form product sm quantity
+        let session = req.session.payload
+
+        let payload = {
+            UserId: session.UserId,
+            ProductId: req.params.id,
+            quantity: 1,
         }
-        User.findOne({
-            where: {
-                email: formValue.email
-            }
-        })
-        .then(selectedUser => {
-            if(selectedUser.password == formValue.password){
-                req.session.payload = {
-                    isLogin: true, 
-                    UserId : selectedUser.id,
-                    role: selectedUser.role
-                }
-                res.redirect('/user')
-            }
-            else {
-                res.redirect('/user/sign-in')
-            }
-        })
-        .catch(err => {
-            res.send(err)
-        })
-    }
 
-    static restockForm (req,res) {
-        const role = req.session.payload.role
-        const id = +req.params.id
-        console.log(role)
-        if(role === 'admin'){
-            Product.findByPk(id)
-            .then(restockProduct => {
-                res.render('restockForm', {restockProduct})
+        Transaction.findOne({
+            where: {
+                ProductId: payload.ProductId,
+                UserId: session.UserId
+            }
+        })
+            .then(data => {
+                if (!data) {
+                    return Transaction.create(payload)
+                }
+                else if (data) {
+
+                    let harga = data.total_price / data.quantity
+                    data.total_price += harga
+                    data.quantity++
+                    data.save()
+                    return data
+                }
+            })
+            .then(data => {
+                res.redirect('/product')
             })
             .catch(err => {
                 res.send(err)
             })
-        }
-        else {
-            res.send(err)
-        }
+
     }
 
+    
 
-    static postRestock (req,res) {
-        const formValue = {
-            name_product: req.body.name_product,
-            stock: +req.body.stock
-        }
-        const id = +req.params.id
-        Product.update(formValue, {
-            where: {
-                id: id
-            }
-        })
-        .then(data => {
-            console.log(data)
-            res.redirect('/product/admin')
-        })
-        .catch(err => {
-            res.send(err)
-        })
+    static deleteProductTrx(req, res) {
+
     }
 
-    static logOut (req,res) {
-        req.session.payload = {}
-        res.redirect('/')
-    }
+    // static postAddProduct (req,res) {
+    //     //post to db transaction
+    // }
 
-    static destroyItem (req,res) {
-        const role = req.session.payload.role
-        const id = +req.params.id
-        if(role == 'admin'){
-            Product.findByPk({
-                where: {
-                    id:id
-                }
-            })
-            .then(deletedItem => {
-                res.redirect('/product?alert=Sucess delete product')
-            })
-            .catch(err => {
-                res.send(err)
-            })
-        }else{
-            res.redirect('/product?alert=Permission denied')
-        }
-    }
 
 }
 

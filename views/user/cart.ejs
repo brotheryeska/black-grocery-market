@@ -1,4 +1,4 @@
-<%-include ('./partials/header')%>
+<%-include ('../partialUser/headerUser')%>
 <div class="row">
     <div class="col">        
       <h1>Cart</h1>
@@ -23,4 +23,4 @@
     </tbody>
   </table>
   <a class="btn btn-primary" onclick="return confirm('Continue to check out?')" href="/transaction/<%=purchase.UserId%>/check-out" role="button">Check Out</a>
-<%-include ('./partials/footer')%>
+  <%-include ('../partialUser/footerUser')%>

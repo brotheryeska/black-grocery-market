@@ -16,7 +16,11 @@ class Controller{
             res.render('./admin/viewProfileAdmin', {selectedUser})
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -26,7 +30,13 @@ class Controller{
             .then(products => {
                 res.render('./admin/allProductAdmin', { products, helper })
             })
-            .catch((err) => res.send(err))
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
+            })
     }
 
     static getEditForm (req,res){
@@ -36,7 +46,11 @@ class Controller{
             res.render('./admin/editProfileadmin', {selectedUser})
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -57,7 +71,11 @@ class Controller{
             res.redirect(`/admin/profile?alert=Sucessfully edit profile`)
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -73,7 +91,11 @@ class Controller{
             res.redirect('/?alert=Sucess deactive account')
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
     
@@ -88,11 +110,15 @@ class Controller{
                 res.render('./admin/restockForm', {restockProduct})
             })
             .catch(err => {
-                res.send(err)
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
             })
         }
         else {
-            res.send(err)
+            res.render('errorPage')
         }
     }
 
@@ -115,7 +141,11 @@ class Controller{
             res.redirect('/admin/product?alert=sucess add product')
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -134,7 +164,11 @@ class Controller{
                 res.redirect('/admin/product?alert=Sucess delete product')
             })
             .catch(err => {
-                res.send(err)
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
             })
         }else{
             res.redirect('/product?alert=Permission denied')

@@ -11,8 +11,8 @@
   <tbody>
     <% for (let i = 0; i < products.length; i++){ %>
     <tr>
-      <td scope="row"> <%=products[i].name_product%></td>
-      <td scope="row"> <%= products[i].price %></td>
+      <td scope="row"> <%=products[i].addBungaToProductName()%></td>
+      <td scope="row"> <%=helper.toCurrency(products[i].price)%></td>
       <td scope="row"> <%= products[i].stock %></td>
       <td scope="row"><a href="/user/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">Add
             to Cart</button></a>

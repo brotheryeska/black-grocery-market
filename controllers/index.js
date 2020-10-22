@@ -27,7 +27,11 @@ class Controller {
                 }
             })
             .catch(err => {
-                res.send(err)
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
             })
     }
 
@@ -63,7 +67,11 @@ class Controller {
             }
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 

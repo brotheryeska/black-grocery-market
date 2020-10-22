@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       })
       Product.hasMany(models.Transaction)
     }
+
+    addBungaToProductName () {
+      return `Bunga ${this.name_product}`
+    }
   };
   Product.init({
     name_product: DataTypes.STRING,

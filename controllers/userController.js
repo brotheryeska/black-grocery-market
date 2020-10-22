@@ -14,7 +14,11 @@ class Controller {
             res.render('./user/viewProfile', {selectedUser})
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -26,7 +30,11 @@ class Controller {
             res.render('./user/editProfile', {selectedUser})
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -47,7 +55,11 @@ class Controller {
             res.redirect(`/user/profile?alert=Sucessfully edit profile`)
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -64,7 +76,11 @@ class Controller {
             res.redirect('/?alert=Sucess deactive account')
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 
@@ -84,7 +100,13 @@ class Controller {
             .then(trx => {
                 res.render("./user/allProduct", { products, trx, helper})
             })
-            .catch((err) => res.send(err))
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
+            })
     }
 
     static viewDetail(req, res) {
@@ -92,7 +114,13 @@ class Controller {
             .then(data => {
                 res.render("./user/detailFlower", { products: data })
             })
-            .catch((err) => res.send(err))
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
+            })
     }
 
 
@@ -133,9 +161,12 @@ class Controller {
                 res.redirect('/user/product')
             })
             .catch(err => {
-                res.send(err)
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', {tampErr})
             })
-
     }
 
     
@@ -151,7 +182,11 @@ class Controller {
             res.redirect('/user/product?alert=sucess delete from cart')
         })
         .catch(err => {
-            res.send(err)
+            let tampErr = []
+            err.errors.forEach(el => {
+                tampErr.push(el.message)
+            })
+            res.render('errorPage', {tampErr})
         })
     }
 

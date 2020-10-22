@@ -140,13 +140,9 @@ class Controller {
     static restockForm (req,res) {
         const role = req.session.payload.role
         const id = +req.params.id
-
+        console.log(role)
         if(role === 'admin'){
-            Transaction.findOne({
-                where: {
-                    ProductId : id      
-                }
-            })
+            Product.findByPk(id)
             .then(restockProduct => {
                 res.render('restockForm', {restockProduct})
             })
@@ -163,24 +159,21 @@ class Controller {
     static postRestock (req,res) {
         const formValue = {
             name_product: req.body.name_product,
-            stock: req.body.stock
+            stock: +req.body.stock
         }
-        const role = req.session.payload.role
-        if(role == 'admin'){
-            Product.findOne({
-                where: {
-                    name_product: formValue.name_product
-                }
-            })
-            .then(restock => {
-                restock.stock = formValue.stock
-                restock.save()
-                return restock
-            })
-            .catch(err => {
-                res.send(err)
-            })
-        }
+        const id = +req.params.id
+        Product.update(formValue, {
+            where: {
+                id: id
+            }
+        })
+        .then(data => {
+            console.log(data)
+            res.redirect('/product/admin')
+        })
+        .catch(err => {
+            res.send(err)
+        })
     }
 
     static logOut (req,res) {

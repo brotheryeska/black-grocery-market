@@ -3,7 +3,7 @@ const { Product, Transaction } = require('../models/index')
 class Controller {
 
     static allProduct(req, res) {
-        let session = req.session.payload
+        let session = req.session.payload.UserId
         let products 
         Product.findAll()
             .then((data) => {
@@ -11,11 +11,13 @@ class Controller {
                 return Transaction.findAll({
                     include: Product,
                     where: { 
-                        UserId: session.UserId 
+                        UserId: session
                     }
                 })
             })
-            .then(trx => res.render("allProduct", {products, trx} ))
+            .then(trx => {
+                res.render("allProduct", {products, trx})
+            })
             .catch((err) => res.send(err))
     }
     

@@ -1,4 +1,5 @@
 let roleUser = function (req, res, next) {
+    console.log(req.session.payload)
     if(req.session.payload == 'user'){
         next()
     }

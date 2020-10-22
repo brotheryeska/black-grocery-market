@@ -19,15 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     hooks:{
-      beforeUpdate : ((instance) => {
-        // console.log(instance)
-        // console.log(sequelize.models.Product, "==>")
-        return sequelize.models.Product.findByPk(instance.ProductId)
-        .then((data) => {
-          console.log(data)
-          instance.total_price += data.price
-        })
-      }),
       beforeCreate : ((instance) => {
         return sequelize.models.Product.findByPk(instance.ProductId)
         .then((data) => {

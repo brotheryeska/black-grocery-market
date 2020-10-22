@@ -32,11 +32,11 @@ router.get('/delete', roleUser, controller.deleteUser) //done
 router.get('/deleteAdmin', roleAdmin, controller.deleteUser) //done
 
 //Add Stock for role admin + middleware
-router.get('/restock', roleAdmin, controller.restockForm)
-router.post('/restock', roleAdmin, controller.postRestock)
+router.get('/restock/:id', controller.restockForm) //done
+router.post('/restock/:id', controller.postRestock) //done
 
 //delete stock for role admin + middleware 
-router.get('/deleteProduct/:id', roleAdmin, controller.destroyItem)
+router.get('/deleteProduct/', roleAdmin, controller.destroyItem)
 
 
 

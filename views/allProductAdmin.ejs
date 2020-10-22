@@ -1,0 +1,23 @@
+<%-include ('./partials/header')%>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Flower Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Stock</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (let i = 0; i < products.length; i++){ %>
+    <tr>
+      <td scope="row"> <%=products[i].name_product%></td>
+      <td scope="row"> <%= products[i].price %></td>
+      <td scope="row"> <%= products[i].stock %></td>
+      <td scope="row"><a href="/user/restock/<%=products[i].id%>"><button type="button" class="btn btn-success">Restock</button></a>
+      </td>
+    </tr>
+    <% } %>
+  </tbody>
+</table><br>
+<%-include ('./partials/footer')%>

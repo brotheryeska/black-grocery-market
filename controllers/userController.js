@@ -43,7 +43,7 @@ class Controller {
             }
         })
         .then(updatedProfile => {
-            res.redirect(`/user/${id}/profile?alert=Sucessfully edit profile`)
+            res.redirect(`/user/profile?alert=Sucessfully edit profile`)
         })
         .catch(err => {
             res.send(err)
@@ -125,7 +125,7 @@ class Controller {
                 }
             })
             .then(data => {
-                res.redirect('/product')
+                res.redirect('/user/product')
             })
             .catch(err => {
                 res.send(err)

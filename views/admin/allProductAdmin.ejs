@@ -1,4 +1,4 @@
-<%-include ('./partials/header')%>
+<%-include ('../partialAdmin/headerAdmin')%>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -14,10 +14,10 @@
       <td scope="row"> <%=products[i].name_product%></td>
       <td scope="row"> <%= products[i].price %></td>
       <td scope="row"> <%= products[i].stock %></td>
-      <td scope="row"><a href="/user/restock/<%=products[i].id%>"><button type="button" class="btn btn-success">Restock</button></a>
+      <td scope="row"><a href="/admin/restock/<%=products[i].id%>"><button type="button" class="btn btn-success">Restock</button></a>
       </td>
     </tr>
     <% } %>
   </tbody>
 </table><br>
-<%-include ('./partials/footer')%>
+<%-include ('../partialAdmin/footerAdmin')%>

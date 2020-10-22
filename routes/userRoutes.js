@@ -14,7 +14,7 @@ router.get('/product', roleUser, controller.allProduct)
 
 //edit profile page + middleware
 router.get('/edit', roleUser, controller.getEditForm) 
-router.post('/editAdmin', roleUser, controller.postUpdate) 
+router.post('/edit', roleUser, controller.postUpdate) 
 
 //deactive user + middleware
 router.get('/delete', roleUser, controller.deleteUser) //done

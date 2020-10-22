@@ -5,6 +5,7 @@
       <th scope="col">Flower Name</th>
       <th scope="col">Price</th>
       <th scope="col">Stock</th>
+      <th scope="col">Details</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -14,6 +15,8 @@
       <td scope="row"> <%=products[i].addBungaToProductName()%></td>
       <td scope="row"> <%=helper.toCurrency(products[i].price)%></td>
       <td scope="row"> <%= products[i].stock %></td>
+      <td scope="row"><a href="/user/detail/<%=products[i].id%>"><button type="button" class="btn btn-success">Details</button></a>
+      </td>
       <td scope="row"><a href="/user/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">Add
             to Cart</button></a>
       </td>
@@ -41,4 +44,5 @@
     <% } %>
   </thead>
 </table>
+<td scope="row"><a href="/user/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">CheckOut</button></a>
 <%-include ('../partialUser/footerUser')%>

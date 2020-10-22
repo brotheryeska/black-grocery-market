@@ -1,39 +1,39 @@
 <%-include ('../partialUser/headerUser')%>
-<canvas id="chart" width="10" height="10"></canvas>
+<canvas id="chart" height="40vh" width="80vw"></canvas>
 <div id="mydiv" data-test=<%=products%>></div>
+<p style="display: none;" id="products"><%=JSON.stringify(products)%></p>
 <script>
-  var test = document.getElementById('mydiv').dataset.test
+  var test = document.getElementById('products').innerText
+  let parsedProduct = JSON.parse(test)
+  
   let tampStock = []
   let tampName = []
-  for(let i = 0; i<test.length; i ++){
-    tampName.push(test[i].name_product)
-    tampStock.push(test[i].stock)
+  for(let i = 0; i<parsedProduct.length; i ++){
+    tampName.push(parsedProduct[i].name_product)
+    tampStock.push(parsedProduct[i].stock)
 
   var ctx = document.getElementById('chart').getContext('2d');
   var chart = new Chart(ctx, {
-    // The type of chart we want to create
     type: 'line',
-    // The data for our dataset
     data: {
         labels:tampName,
         datasets: [{
-            label: 'My First dataset',
+            label: "Current Stock",
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgb(255, 99, 132)',
             data: tampStock
         }]
     },
-    // Configuration options go here
     options: {}
 });
   }
 </script>
+
 <table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Flower Name</th>
       <th scope="col">Price</th>
-      <th scope="col">Stock</th>
       <th scope="col">Details</th>
       <th scope="col">Action</th>
     </tr>
@@ -43,7 +43,6 @@
     <tr>
       <td scope="row"> <%=products[i].addBungaToProductName()%></td>
       <td scope="row"> <%=helper.toCurrency(products[i].price)%></td>
-      <td scope="row"> <%= products[i].stock %></td>
       <td scope="row"><a href="/user/detail/<%=products[i].id%>"><button type="button" class="btn btn-success">Details</button></a>
       </td>
       <td scope="row"><a href="/user/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">Add

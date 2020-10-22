@@ -2,7 +2,7 @@ const express = require('express')
 const router = require('./routes/index')
 const app = express()
 const session = require('express-session')
-const port = 3000
+const port = process.env.PORT || 4000
 
 app.set('view engine', 'ejs')
 app.use(express.json())

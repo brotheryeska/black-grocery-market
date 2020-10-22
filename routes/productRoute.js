@@ -10,7 +10,7 @@ router.get('/admin', roleAdmin, controller.viewProductAdmin )
 
 
 //////USER///////
-//list product
+//list product//
 router.get('/user', roleUser, controller.allProduct)
 
 //see spesific product

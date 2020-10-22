@@ -25,14 +25,12 @@ class Controller {
     }
 
     static getAddProduct(req, res) {
-        //get url form product sm quantity
-        // res.render('addProduct')
-
         let payload = {
             UserId: 6,
             ProductId: req.params.id,
             quantity: 1,
         }
+
         Transaction.findOne({
             where: {
                 ProductId: payload.ProductId,
@@ -59,7 +57,7 @@ class Controller {
     }
 
     static deleteProductTrx(req, res){
-        
+
     }
 
     // static postAddProduct (req,res) {

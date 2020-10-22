@@ -1,4 +1,5 @@
 const {User, Product, Transaction} = require('../models/index')
+const helper = require('../helper/convertMoney')
 
 class Controller {
 
@@ -81,7 +82,7 @@ class Controller {
                 })
             })
             .then(trx => {
-                res.render("./user/allProduct", { products, trx })
+                res.render("./user/allProduct", { products, trx, helper})
             })
             .catch((err) => res.send(err))
     }

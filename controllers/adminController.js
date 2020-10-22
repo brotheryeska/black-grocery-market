@@ -1,4 +1,5 @@
 const {User, Product} = require('../models/index')
+const helper = require('../helper/convertMoney')
 
 class Controller{
 
@@ -23,7 +24,7 @@ class Controller{
     static viewProductAdmin(req, res) {
         Product.findAll()
             .then(products => {
-                res.render('./admin/allProductAdmin', { products })
+                res.render('./admin/allProductAdmin', { products, helper })
             })
             .catch((err) => res.send(err))
     }

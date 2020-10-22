@@ -1,9 +1,6 @@
 const router = require('express').Router()
 const controller = require('../controllers/productController')
-
-//list product
-router.get('/', controller.allProduct)
-
+const roleAdmin = require('../middleware/roleAdmin')
 //see spesific product
 router.get('/detail/:id', controller.viewDetail)
 

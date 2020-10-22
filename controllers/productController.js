@@ -17,9 +17,7 @@ class Controller {
             })
             .then(trx => res.render("allProduct", {products, trx} ))
             .catch((err) => res.send(err))
-        }
-    
-    
+    }
     
 
     static viewDetail(req, res) {

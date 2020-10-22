@@ -1,11 +1,16 @@
 <%-include ('./partials/header')%>
+<div class="row">
+    <div class="col">        
+      <h1>Cart</h1>
+    </div>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Product Name</th>
-        <th scope="col">Amount</th>
+        <th scope="col">Product</th>
+        <th scope="col">Quantity</th>
         <th scope="col">Price</th>
-        <th scope="col">Total Price</th>
+        <th scope="col">Total</th>
       </tr>
     </thead>
     <tbody>
@@ -13,9 +18,9 @@
         <td scope="row"><%=purchase.Product.name_product%></td>
         <td scope="row"><%=purchase.quantity%></td>
         <td scope="row"><%=purchase.Product.price%></td>
-        <td scope="row"><%=purchase.total_price%></td>
+        <td scope="row">Totalnya</td>
        </tr>
     </tbody>
   </table>
-  <a class="btn btn-primary" onclick="return confirm('Click Ok to continue deactive account')" href="/user/<%=selectedUser.id%>/delete" role="button">Deactive Account</a>
+  <a class="btn btn-primary" onclick="return confirm('Continue to check out?')" href="/transaction/<%=purchase.UserId%>/check-out" role="button">Check Out</a>
 <%-include ('./partials/footer')%>

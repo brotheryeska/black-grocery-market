@@ -1,33 +1,41 @@
 const router = require('express').Router()
 const controller = require('../controllers/userController')
+const roleUser = require('../middleware/index')
 
 
-//welcome page after login
+//welcome page after login + middleware
 router.get('/', controller.welcomePage) //done
 
 //signUp
 router.get('/sign-up', controller.signUpForm) //done
 router.post('/sign-up', controller.postRegistration) //done
 
-router.get('/sign-in', controller.getSignIn)
+//sign-in
+router.get('/sign-in', controller.getSignIn) 
 router.post('/sign-in', controller.postSignIn)
 
-//see profile page
-router.get('/:id/profile', controller.viewProfile) //done
+router.get('/sign-out', controller.logOut) //+ middleware
 
-//edit profile page
-router.get('/:id/edit', controller.getEditForm) //done
-router.post('/:id/edit', controller.postUpdate) //done
+//see profile page + middleware
+router.get('/profile', roleUser, controller.viewProfile) //done
 
-//add item to purchase ist
-router.get('/:id/add-item', controller.addItem)
-router.post('/:id/add-item', controller.postItem)
+//edit profile page + middleware
+router.get('/edit', roleUser, controller.getEditForm) //done
+router.post('/edit', roleUser, controller.postUpdate) //done
 
-//deactive user
-router.get('/:id/delete', controller.deleteUser) //done
+//deactive user + middleware
+router.get('/delete', roleUser, controller.deleteUser) //done
 
-//see purchase transaction list
-router.get(':id/purchase-list', controller.viewCart)//blm di cek karena blm ada datanya
+//see purchase transaction list + middleware
+router.get('/purchase-list', roleUser, controller.viewCart)//blm di cek karena blm ada datanya
+
+
+
+//Add Stock for role admin + middleware
+router.get('/:id/restock', controller.restockForm)
+router.post('/:id/restock', controller.postRestock)
+
+
 
 
 module.exports = router

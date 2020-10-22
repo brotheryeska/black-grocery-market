@@ -1,3 +1,5 @@
+const {User, Product, Transaction} = require('../models/index')
+
 class Controller {
 
     static viewCart (req,res) {
@@ -17,6 +19,9 @@ class Controller {
         //remove item
     }
 
+    static checkOut (req,res) {
+        
+    }
 }
 
 module.exports = Controller

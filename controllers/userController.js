@@ -1,10 +1,11 @@
-const {User, Product, Transacion} = require('../models/index')
+const {User, Product, Transaction} = require('../models/index')
 
 class Controller {
 
 
     static welcomePage(req,res){
         //after login page
+        // console.log(req.session)
         res.render('homepage-session')
     }
 
@@ -31,7 +32,7 @@ class Controller {
 
     static viewProfile(req,res) {
         //find one profile user
-        const id = +req.params.id
+        const id = +req.session.payload.UserId
         
         User.findByPk(id)
         .then(selectedUser=> {
@@ -45,7 +46,7 @@ class Controller {
 
     static getEditForm (req,res){
         //edit profile
-        const id = +req.params.id
+        const id = +req.session.payload.UserId
 
         User.findByPk(id)
         .then(selectedUser=> {
@@ -59,7 +60,7 @@ class Controller {
 
     static postUpdate (req,res) {
         //edit profile
-        const id = +req.params.id
+        const id = +req.session.payload.UserId
         const formValue = {
             full_name: req.body.full_name,
             email: req.body.email,
@@ -79,19 +80,9 @@ class Controller {
     }
 
 
-    static addItem (req,res) {
-        //add item to purchaselist
-    }
-
-
-    static postItem (req,res) {
-        //update db transaction
-    }
-
-
     static deleteUser (req,res) {
         //remove item from db
-        const id = +req.params.id
+        const id = +req.session.payload.UserId
 
         User.destroy({
             where: {
@@ -99,6 +90,7 @@ class Controller {
             }
         })
         .then(data => {
+            req.session.payload = {}
             res.redirect('/?alert=Sucess deactive account')
         })
         .catch(err => {
@@ -107,15 +99,17 @@ class Controller {
     }
 
     static viewCart (req,res) {
-        const id = +req.params.id
+        const id = +req.session.payload.UserId
+        // res.send('ini cart page')
 
-        Transacion.findOne({
+        Transaction.findAll({
             where: {
-                id:id
+                UserId: id
             },
-            include: [Product]
+            include: Product
         })
         .then(purchase => {
+            // res.send(purchase)
             res.render('purchaseList', {purchase})
         })
         .catch(err => {
@@ -132,6 +126,51 @@ class Controller {
             email: req.body.email,
             password: req.body.password
         }
+        User.findOne({
+            where: {
+                email: formValue.email
+            }
+        })
+        .then(selectedUser => {
+            if(selectedUser.password == formValue.password){
+                req.session.payload = {
+                    isLogin: true, 
+                    UserId : selectedUser.id,
+                    role: selectedUser.role
+                }
+                res.redirect('/user')
+            }
+            else {
+                res.redirect('/user/sign-in')
+            }
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static restockForm (req,res) {
+        const id = +req.params.id
+        Transaction.findOne({
+            where: {
+                ProductId : id      
+            }
+        })
+        .then(restockProduct => {
+            res.render('restockForm', {restockProduct})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static postRestock (req,res) {
+
+    }
+
+    static logOut (req,res) {
+        req.session.payload = {}
+        res.redirect('/')
     }
 
 }

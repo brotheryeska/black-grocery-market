@@ -1,4 +1,33 @@
 <%-include ('../partialUser/headerUser')%>
+<canvas id="chart" width="10" height="10"></canvas>
+<div id="mydiv" data-test=<%=products%>></div>
+<script>
+  var test = document.getElementById('mydiv').dataset.test
+  let tampStock = []
+  let tampName = []
+  for(let i = 0; i<test.length; i ++){
+    tampName.push(test[i].name_product)
+    tampStock.push(test[i].stock)
+
+  var ctx = document.getElementById('chart').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+    // The data for our dataset
+    data: {
+        labels:tampName,
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: tampStock
+        }]
+    },
+    // Configuration options go here
+    options: {}
+});
+  }
+</script>
 <table class="table table-striped">
   <thead>
     <tr>

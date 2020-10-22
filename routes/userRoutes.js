@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const controller = require('../controllers/userController')
-const roleUser = require('../middleware/index')
+const roleUser = require('../middleware/roleUser')
+const roleAdmin = require('../middleware/roleAdmin')
 
 
 //welcome page after login + middleware
@@ -11,29 +12,31 @@ router.get('/sign-up', controller.signUpForm) //done
 router.post('/sign-up', controller.postRegistration) //done
 
 //sign-in
-router.get('/sign-in', controller.getSignIn) 
-router.post('/sign-in', controller.postSignIn)
+router.get('/sign-in', controller.getSignIn) //done
+router.post('/sign-in', controller.postSignIn) //done
 
-router.get('/sign-out', controller.logOut) //+ middleware
+//sign-out
+router.get('/sign-out', controller.logOut) //done
 
 //see profile page + middleware
 router.get('/profile', roleUser, controller.viewProfile) //done
+router.get('/profileAdmin', roleAdmin, controller.viewProfile)
+
 
 //edit profile page + middleware
 router.get('/edit', roleUser, controller.getEditForm) //done
-router.post('/edit', roleUser, controller.postUpdate) //done
+router.post('/editAdmin', roleUser, controller.postUpdate) //done
 
 //deactive user + middleware
 router.get('/delete', roleUser, controller.deleteUser) //done
-
-//see purchase transaction list + middleware
-router.get('/purchase-list', roleUser, controller.viewCart)//blm di cek karena blm ada datanya
-
-
+router.get('/deleteAdmin', roleAdmin, controller.deleteUser) //done
 
 //Add Stock for role admin + middleware
-router.get('/:id/restock', controller.restockForm)
-router.post('/:id/restock', controller.postRestock)
+router.get('/restock', roleAdmin, controller.restockForm)
+router.post('/restock', roleAdmin, controller.postRestock)
+
+//delete stock for role admin + middleware 
+router.get('/deleteProduct/:id', roleAdmin, controller.destroyItem)
 
 
 

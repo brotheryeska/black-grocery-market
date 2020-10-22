@@ -3,7 +3,7 @@ const { Product, Transaction } = require('../models/index')
 class Controller {
 
     static allProduct(req, res) {
-
+        let session = req.session.payload
         let products 
         Product.findAll()
             .then((data) => {
@@ -11,13 +11,16 @@ class Controller {
                 return Transaction.findAll({
                     include: Product,
                     where: { 
-                        UserId: 6 
+                        UserId: session.UserId 
                     }
                 })
             })
             .then(trx => res.render("allProduct", {products, trx} ))
             .catch((err) => res.send(err))
         }
+    
+    
+    
 
     static viewDetail(req, res) {
         //see spesific product
@@ -30,10 +33,10 @@ class Controller {
 
     static getAddProduct(req, res) {
         //get url form product sm quantity
-        // res.render('addProduct')
+        let session = req.session.payload
 
         let payload = {
-            UserId: 6,
+            UserId: session.UserId,
             ProductId: req.params.id,
             quantity: 1,
         }
@@ -41,7 +44,7 @@ class Controller {
         Transaction.findOne({
             where: {
                 ProductId: payload.ProductId,
-                UserId: 6
+                UserId: session.UserId
             }
         })
             .then(data => {
@@ -49,19 +52,16 @@ class Controller {
                     return Transaction.create(payload)
                 } 
                 else if (data) {
+                    
+                    let harga = data.total_price/data.quantity
+                    data.total_price += harga
                     data.quantity++
-                    let harga = data.total_price 
-                    data.total_price = harga
                     data.save()
                     return data
                 }
             })
             .then(data => {
                 res.redirect('/product')
-            })
-            Product.findByPk(payload.ProductId)
-            .then(currentStock => {
-
             })
             .catch(err => {
                 res.send(err)

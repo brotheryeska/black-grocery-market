@@ -4,8 +4,6 @@ class Controller {
 
 
     static welcomePage(req,res){
-        //after login page
-        // console.log(req.session)
         res.render('homepage-session')
     }
 
@@ -31,9 +29,7 @@ class Controller {
 
 
     static viewProfile(req,res) {
-        //find one profile user
         const id = +req.session.payload.UserId
-        
         User.findByPk(id)
         .then(selectedUser=> {
             res.render('viewProfile', {selectedUser})
@@ -45,9 +41,7 @@ class Controller {
 
 
     static getEditForm (req,res){
-        //edit profile
         const id = +req.session.payload.UserId
-
         User.findByPk(id)
         .then(selectedUser=> {
             res.render('editProfile', {selectedUser})
@@ -59,7 +53,6 @@ class Controller {
 
 
     static postUpdate (req,res) {
-        //edit profile
         const id = +req.session.payload.UserId
         const formValue = {
             full_name: req.body.full_name,
@@ -81,9 +74,7 @@ class Controller {
 
 
     static deleteUser (req,res) {
-        //remove item from db
         const id = +req.session.payload.UserId
-
         User.destroy({
             where: {
                 id: id
@@ -100,8 +91,6 @@ class Controller {
 
     static viewCart (req,res) {
         const id = +req.session.payload.UserId
-        // res.send('ini cart page')
-
         Transaction.findAll({
             where: {
                 UserId: id
@@ -109,7 +98,6 @@ class Controller {
             include: Product
         })
         .then(purchase => {
-            // res.send(purchase)
             res.render('purchaseList', {purchase})
         })
         .catch(err => {
@@ -150,27 +138,74 @@ class Controller {
     }
 
     static restockForm (req,res) {
+        const role = req.session.payload.role
         const id = +req.params.id
-        Transaction.findOne({
-            where: {
-                ProductId : id      
-            }
-        })
-        .then(restockProduct => {
-            res.render('restockForm', {restockProduct})
-        })
-        .catch(err => {
+
+        if(role === 'admin'){
+            Transaction.findOne({
+                where: {
+                    ProductId : id      
+                }
+            })
+            .then(restockProduct => {
+                res.render('restockForm', {restockProduct})
+            })
+            .catch(err => {
+                res.send(err)
+            })
+        }
+        else {
             res.send(err)
-        })
+        }
     }
 
-    static postRestock (req,res) {
 
+    static postRestock (req,res) {
+        const formValue = {
+            name_product: req.body.name_product,
+            stock: req.body.stock
+        }
+        const role = req.session.payload.role
+        if(role == 'admin'){
+            Product.findOne({
+                where: {
+                    name_product: formValue.name_product
+                }
+            })
+            .then(restock => {
+                restock.stock = formValue.stock
+                restock.save()
+                return restock
+            })
+            .catch(err => {
+                res.send(err)
+            })
+        }
     }
 
     static logOut (req,res) {
         req.session.payload = {}
         res.redirect('/')
+    }
+
+    static destroyItem (req,res) {
+        const role = req.session.payload.role
+        const id = +req.params.id
+        if(role == 'admin'){
+            Product.findByPk({
+                where: {
+                    id:id
+                }
+            })
+            .then(deletedItem => {
+                res.redirect('/product?alert=Sucess delete product')
+            })
+            .catch(err => {
+                res.send(err)
+            })
+        }else{
+            res.redirect('/product?alert=Permission denied')
+        }
     }
 
 }

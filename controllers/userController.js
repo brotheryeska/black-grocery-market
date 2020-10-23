@@ -1,45 +1,47 @@
-const {User, Product, Transaction} = require('../models/index')
+const { User, Product, Transaction } = require('../models/index')
 const helper = require('../helper/convertMoney')
+const { Op } = require("sequelize")
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants')
 
 class Controller {
 
-    static welcomePage(req, res){
+    static welcomePage(req, res) {
         res.render("./user/homepage")
     }
 
-    static viewProfile(req,res) {
+    static viewProfile(req, res) {
         const id = +req.session.payload.UserId
         User.findByPk(id)
-        .then(selectedUser=> {
-            res.render('./user/viewProfile', {selectedUser})
-        })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
+            .then(selectedUser => {
+                res.render('./user/viewProfile', { selectedUser })
             })
-            res.render('errorPage', {tampErr})
-        })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
 
-    static getEditForm (req,res){
+    static getEditForm(req, res) {
         const id = +req.session.payload.UserId
         User.findByPk(id)
-        .then(selectedUser=> {
-            res.render('./user/editProfile', {selectedUser})
-        })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
+            .then(selectedUser => {
+                res.render('./user/editProfile', { selectedUser })
             })
-            res.render('errorPage', {tampErr})
-        })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
 
-    static postUpdate (req,res) {
+    static postUpdate(req, res) {
         const id = +req.session.payload.UserId
         const formValue = {
             full_name: req.body.full_name,
@@ -51,37 +53,37 @@ class Controller {
                 id: id
             }
         })
-        .then(updatedProfile => {
-            res.redirect(`/user/profile?alert=Sucessfully edit profile`)
-        })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
+            .then(updatedProfile => {
+                res.redirect(`/user/profile?alert=Sucessfully edit profile`)
             })
-            res.render('errorPage', {tampErr})
-        })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
 
-    static deleteUser (req,res) {
+    static deleteUser(req, res) {
         const id = +req.session.payload.UserId
         User.destroy({
             where: {
                 id: id
             }
         })
-        .then(data => {
-            req.session.payload = {}
-            res.redirect('/?alert=Sucess deactive account')
-        })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
+            .then(data => {
+                req.session.payload = {}
+                res.redirect('/?alert=Sucess deactive account')
             })
-            res.render('errorPage', {tampErr})
-        })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
     static allProduct(req, res) {
@@ -98,28 +100,28 @@ class Controller {
                 })
             })
             .then(trx => {
-                res.render("./user/allProduct", { products, trx, helper})
+                res.render("./user/allProduct", { products, trx, helper })
             })
             .catch(err => {
                 let tampErr = []
                 err.errors.forEach(el => {
                     tampErr.push(el.message)
                 })
-                res.render('errorPage', {tampErr})
+                res.render('errorPage', { tampErr })
             })
     }
 
     static viewDetail(req, res) {
         Product.findByPk(req.params.id)
             .then(data => {
-                res.render("./user/detailFlower", {products: data, helper})
+                res.render("./user/detailFlower", { products: data, helper })
             })
             .catch(err => {
                 let tampErr = []
                 err.errors.forEach(el => {
                     tampErr.push(el.message)
                 })
-                res.render('errorPage', {tampErr})
+                res.render('errorPage', { tampErr })
             })
     }
 
@@ -160,7 +162,7 @@ class Controller {
             })
     }
 
-    
+
 
     static deleteProductTrx(req, res) {
         const idUser = +req.params.id1
@@ -171,40 +173,63 @@ class Controller {
                 ProductId: idProduct
             }
         })
-        .then(data => {
-            res.redirect('/user/product?alert=sucess delete from cart')
-        })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
+            .then(data => {
+                res.redirect('/user/product?alert=sucess delete from cart')
             })
-            res.render('errorPage', {tampErr})
-        })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
-    static checkOut (req, res) {
+    static checkOut(req, res) {
         const id = req.session.payload.UserId
-        Transaction.findAll({where: {
-            UserId : id
-        }})
-        .then(data => res.send(data))
-        // Transaction.destroy({
-        //     where: {
-        //         UserId : id
-        //     }
-        // })
-        // .then(data => {
-        
-        //     res.redirect(`/user/?alert=You're Purchase has been made`)
-        // })
-        .catch(err => {
-            let tampErr = []
-            err.errors.forEach(el => {
-                tampErr.push(el.message)
-            })
-            res.render('errorPage', {tampErr})
+        let trx  
+        Transaction.findAll({
+            where: {
+                UserId: id
+            }
         })
+            .then(data => {
+                trx = data
+                let result = []
+                for (let i = 0; i < data.length; i++) {
+                    result.push({ id: data[i].ProductId })
+                }
+                return Product.findAll({
+                    where:{
+                        [Op.or]: result 
+                    }
+                })
+            })
+            .then(data => {
+                for(let i = 0; i< data.length; i++){
+                    for(let j = 0; j< trx.length; j++){
+                        if(data[i].id === trx[j].ProductId){
+                            data[i].stock -= trx[j].quantity
+                            data[i].save()
+                        }
+                    }
+                }
+                return  Transaction.destroy({
+                    where: {
+                        UserId : id
+                    }
+                })
+            })
+            .then(data => {
+                res.redirect(`/user/?alert=You're Purchase has been made`)
+            })
+            .catch(err => {
+                let tampErr = []
+                err.errors.forEach(el => {
+                    tampErr.push(el.message)
+                })
+                res.render('errorPage', { tampErr })
+            })
     }
 
 }

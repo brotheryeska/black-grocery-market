@@ -1,4 +1,4 @@
-<%-include ('./partials/header')%>
+<%-include ('../partialAdmin/headerAdmin')%>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -12,12 +12,14 @@
     <% for (let i = 0; i < products.length; i++){ %>
     <tr>
       <td scope="row"> <%=products[i].name_product%></td>
-      <td scope="row"> <%= products[i].price %></td>
+      <td scope="row"> <%=helper.toCurrency(products[i].price)%></td>
       <td scope="row"> <%= products[i].stock %></td>
-      <td scope="row"><a href="/user/restock/<%=products[i].id%>"><button type="button" class="btn btn-success">Restock</button></a>
+      <td scope="row"><a href="/admin/restock/<%=products[i].id%>"><button type="button" class="btn btn-success mr-3">Restock</button></a>
+        <a href="/admin/deleteProduct/<%=products[i].id%>"><button type="button" class="btn btn-success">Delete</button></a>
       </td>
     </tr>
     <% } %>
   </tbody>
 </table><br>
-<%-include ('./partials/footer')%>
+<a href="/admin/product/visualization" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Visualization</a>
+<%-include ('../partialAdmin/footerAdmin')%>

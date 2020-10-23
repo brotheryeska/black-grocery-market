@@ -1,4 +1,5 @@
 const {User, Product, Transaction} = require('../models/index')
+const helper = require('../helper/convertMoney')
 
 class Controller {
 
@@ -43,7 +44,7 @@ class Controller {
             }
         })
         .then(updatedProfile => {
-            res.redirect(`/user/${id}/profile?alert=Sucessfully edit profile`)
+            res.redirect(`/user/profile?alert=Sucessfully edit profile`)
         })
         .catch(err => {
             res.send(err)
@@ -81,13 +82,12 @@ class Controller {
                 })
             })
             .then(trx => {
-                res.render("./user/allProduct", { products, trx })
+                res.render("./user/allProduct", { products, trx, helper})
             })
             .catch((err) => res.send(err))
     }
 
     static viewDetail(req, res) {
-        //see spesific product
         Product.findByPk(req.params.id)
             .then(data => {
                 res.render("./user/detailFlower", { products: data })
@@ -95,8 +95,9 @@ class Controller {
             .catch((err) => res.send(err))
     }
 
+
     static getAddProduct(req, res) {
-        //get url form product sm quantity
+
         let session = req.session.payload
 
         let payload = {
@@ -109,23 +110,27 @@ class Controller {
             where: {
                 ProductId: payload.ProductId,
                 UserId: session.UserId
-            }
+            }, include: Product
         })
             .then(data => {
                 if (!data) {
                     return Transaction.create(payload)
                 }
                 else if (data) {
-
+                    console.log(data.Product.stock)
                     let harga = data.total_price / data.quantity
+                    console.log(currentStock)
                     data.total_price += harga
                     data.quantity++
+                    
                     data.save()
                     return data
                 }
             })
             .then(data => {
-                res.redirect('/product')
+                let currentStock = data.Product.stock - 1
+                data.Product.stock = currentStock
+                res.redirect('/user/product')
             })
             .catch(err => {
                 res.send(err)
@@ -136,13 +141,16 @@ class Controller {
     
 
     static deleteProductTrx(req, res) {
-
+        Transaction.findByPk({
+            where: {id: req.params.id}
+        })
+        .then(data => {
+            res.redirect('/user/product?alert=sucess delete from cart')
+        })
+        .catch(err => {
+            res.send(err)
+        })
     }
-
-    // static postAddProduct (req,res) {
-    //     //post to db transaction
-    // }
-
 
 }
 

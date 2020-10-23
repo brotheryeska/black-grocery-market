@@ -1,5 +1,5 @@
-<%-include ('./partials/header')%>
-<a class="btn btn-primary" href="/user/edit" role="button">Edit Profile</a>
+<%-include ('../partialAdmin/headerAdmin')%>
+<a class="btn btn-primary" href="/admin/edit" role="button">Edit Profile</a>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -16,5 +16,5 @@
        </tr>
     </tbody>
   </table>
-  <a class="btn btn-primary" onclick="return confirm('Click Ok to continue deactive account')" href="/user/delete" role="button">Deactive Account</a>
-<%-include ('./partials/footer')%>
+  <a class="btn btn-primary" onclick="return confirm('Click Ok to continue deactive account')" href="/admin/delete" role="button">Deactive Account</a>
+  <%-include ('../partialAdmin/footerAdmin')%>

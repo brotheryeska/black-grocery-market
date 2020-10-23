@@ -14,7 +14,7 @@
       <td scope="row"> <%=products[i].name_product%></td>
       <td scope="row"> <%= products[i].price %></td>
       <td scope="row"> <%= products[i].stock %></td>
-      <td scope="row"><a href="/product/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">Add
+      <td scope="row"><a href="/user/<%=products[i].id%>/add-item"><button type="button" class="btn btn-success">Add
             to Cart</button></a>
       </td>
     </tr>
@@ -34,8 +34,8 @@
     <tr>
       <td scope="row"><%=trx[i].Product.name_product %></td>
       <td scope="row"><%=trx[i].quantity%></td>
-      <td scope="row"><%=trx[i].total_price %></td>
-      <td scope="row"><a href="/product"><button type="button" class="btn btn-danger">DELETE</button></a>
+      <td scope="row"><%=helper.toCurrency(trx[i].total_price)%></td>
+      <td scope="row"><a href="/user/<%=i+1%>/delete-item"><button type="button" class="btn btn-danger">DELETE</button></a>
       </td>
     </tr>
     <% } %>

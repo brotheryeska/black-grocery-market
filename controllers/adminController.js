@@ -1,10 +1,11 @@
 const {User, Product} = require('../models/index')
+const helper = require('../helper/convertMoney')
 
 class Controller{
 
 
     static welcomePage(req, res){
-        res.render("homepageAdmin")
+        res.render("./admin/homepageAdmin")
     }
 
 
@@ -12,7 +13,7 @@ class Controller{
         const id = +req.session.payload.UserId
         User.findByPk(id)
         .then(selectedUser=> {
-            res.render('viewProfile', {selectedUser})
+            res.render('./admin/viewProfileAdmin', {selectedUser})
         })
         .catch(err => {
             res.send(err)
@@ -23,11 +24,42 @@ class Controller{
     static viewProductAdmin(req, res) {
         Product.findAll()
             .then(products => {
-                res.render('allProductAdmin', { products })
+                res.render('./admin/allProductAdmin', { products, helper })
             })
             .catch((err) => res.send(err))
     }
 
+    static getEditForm (req,res){
+        const id = +req.session.payload.UserId
+        User.findByPk(id)
+        .then(selectedUser=> {
+            res.render('./admin/editProfileadmin', {selectedUser})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+
+    static postUpdate (req,res) {
+        const id = +req.session.payload.UserId
+        const formValue = {
+            full_name: req.body.full_name,
+            email: req.body.email,
+            password: req.body.password
+        }
+        User.update(formValue, {
+            where: {
+                id: id
+            }
+        })
+        .then(updatedProfile => {
+            res.redirect(`/admin/profile?alert=Sucessfully edit profile`)
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
 
     static deleteUser (req,res) {
         const id = +req.session.payload.UserId
@@ -53,7 +85,7 @@ class Controller{
         if(role === 'admin'){
             Product.findByPk(id)
             .then(restockProduct => {
-                res.render('restockForm', {restockProduct})
+                res.render('./admin/restockForm', {restockProduct})
             })
             .catch(err => {
                 res.send(err)
@@ -66,19 +98,21 @@ class Controller{
 
 
     static postRestock (req,res) {
-        const formValue = {
-            name_product: req.body.name_product,
-            stock: +req.body.stock
-        }
         const id = +req.params.id
-        Product.update(formValue, {
-            where: {
-                id: id
+        Product.findByPk(id)
+        .then(data => {
+            const formValue = {
+                name_product: req.body.name_product,
+                stock: +req.body.stock + data.stock
             }
+            return Product.update(formValue, {
+                where: {
+                    id: id
+                }
+            })
         })
         .then(data => {
-            console.log(data)
-            res.redirect('/product/admin')
+            res.redirect('/admin/product?alert=sucess add product')
         })
         .catch(err => {
             res.send(err)
@@ -91,13 +125,13 @@ class Controller{
         const role = req.session.payload.role
         const id = +req.params.id
         if(role == 'admin'){
-            Product.findByPk({
+            Product.destroy({
                 where: {
-                    id:id
+                    id: id
                 }
             })
             .then(deletedItem => {
-                res.redirect('/product?alert=Sucess delete product')
+                res.redirect('/admin/product?alert=Sucess delete product')
             })
             .catch(err => {
                 res.send(err)
@@ -105,6 +139,14 @@ class Controller{
         }else{
             res.redirect('/product?alert=Permission denied')
         }
+    }
+
+    static viewProductVisualAdmin(req,res){
+        Product.findAll()
+        .then((data) => {
+            res.render('visualizationData', {flower: data})
+        })
+        .catch((err) => res.send(err))
     }
 
 }

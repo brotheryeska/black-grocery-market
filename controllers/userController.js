@@ -91,14 +91,13 @@ class Controller {
             .then((data) => {
                 products = data
                 return Transaction.findAll({
-                    // include: Product,
+                    include: Product,
                     where: {
                         UserId: session
                     }
                 })
             })
             .then(trx => {
-                // console.log(trx)
                 res.render("./user/allProduct", { products, trx, helper})
             })
             .catch(err => {
@@ -146,12 +145,9 @@ class Controller {
                     return Transaction.create(payload)
                 }
                 else if (data) {
-                    console.log(data.Product.stock)
                     let harga = data.total_price / data.quantity
-                    console.log(currentStock)
                     data.total_price += harga
                     data.quantity++
-                    
                     data.save()
                     return data
                 }

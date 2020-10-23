@@ -103,7 +103,7 @@ class Controller{
     static restockForm (req,res) {
         const role = req.session.payload.role
         const id = +req.params.id
-        console.log(role)
+    
         if(role === 'admin'){
             Product.findByPk(id)
             .then(restockProduct => {

@@ -22,15 +22,15 @@ module.exports = {
     {
       full_name: 'Yeska',
       email: 'yeska@gmail.com',
-      password: 'lelah',
+      password: 'yeska',
       role: 'admin',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       full_name: 'Ayu Sudi',
-      email: 'instRuckTo3r_Q@gmail.com',
-      password: 'sudahcukup',
+      email: 'ayu@gmail.com',
+      password: 'ayu',
       role: 'user',
       createdAt: new Date(),
       updatedAt: new Date()

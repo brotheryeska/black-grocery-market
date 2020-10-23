@@ -62,8 +62,8 @@
       <th scope="col">Action</th>
     </tr>
     <% for(let i = 0; i < trx.length; i++) { %>
-    <tr>
-      <td scope="row">test</td>
+    <tr> 
+      <td scope="row"><%=trx[i].Product.name_product%></td>
       <td scope="row"><%=trx[i].quantity%></td>
       <td scope="row"><%=helper.toCurrency(trx[i].total_price)%></td>
       <td scope="row"><a href="/user/<%=trx[i].UserId%>/<%=trx[i].ProductId%>/delete-item"><button type="button" class="btn btn-danger">DELETE</button></a>

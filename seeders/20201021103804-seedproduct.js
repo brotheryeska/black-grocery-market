@@ -30,6 +30,20 @@ module.exports = {
         stock: 20,
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        name_product: "Daisy",
+        price: 30000,
+        stock: 20,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name_product: "Tulip",
+        price: 24000,
+        stock: 20,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {})
   },

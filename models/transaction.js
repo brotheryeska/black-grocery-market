@@ -4,13 +4,17 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
-  
+    
     static associate(models) {
       Transaction.belongsTo(models.User)
       Transaction.belongsTo(models.Product)
-      
+    }
+
+    get idOfTransaction () {
+      return this.id
     }
   };
+
   Transaction.init({
     quantity: DataTypes.INTEGER,
     total_price: DataTypes.INTEGER,

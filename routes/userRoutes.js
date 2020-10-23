@@ -28,7 +28,7 @@ router.get('/detail/:id', controller.viewDetail)
 router.get('/:id/add-item', controller.getAddProduct)
 
 //delete trx
-router.get('/:id/delete-item', controller.deleteProductTrx)
+router.get('/:id1/:id2/delete-item', controller.deleteProductTrx)
 
 
 

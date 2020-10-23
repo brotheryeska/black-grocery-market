@@ -63,7 +63,7 @@ class Controller {
                 }    
             }
             else {
-                res.redirect('/user/sign-in')
+                res.redirect('/sign-in')
             }
         })
         .catch(err => {

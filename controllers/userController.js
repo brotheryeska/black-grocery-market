@@ -91,13 +91,14 @@ class Controller {
             .then((data) => {
                 products = data
                 return Transaction.findAll({
-                    include: Product,
+                    // include: Product,
                     where: {
                         UserId: session
                     }
                 })
             })
             .then(trx => {
+                // console.log(trx)
                 res.render("./user/allProduct", { products, trx, helper})
             })
             .catch(err => {
@@ -112,7 +113,7 @@ class Controller {
     static viewDetail(req, res) {
         Product.findByPk(req.params.id)
             .then(data => {
-                res.render("./user/detailFlower", { products: data })
+                res.render("./user/detailFlower", {products: data, helper})
             })
             .catch(err => {
                 let tampErr = []
@@ -156,26 +157,22 @@ class Controller {
                 }
             })
             .then(data => {
-                let currentStock = data.Product.stock - 1
-                data.Product.stock = currentStock
                 res.redirect('/user/product')
             })
             .catch(err => {
-                let tampErr = []
-                err.errors.forEach(el => {
-                    tampErr.push(el.message)
-                })
-                res.render('errorPage', {tampErr})
+                res.send(err)
             })
     }
 
     
 
     static deleteProductTrx(req, res) {
-        const id = +req.params.id
-        Transaction.findByPk({
+        const idUser = +req.params.id1
+        const idProduct = +req.params.id2
+        Transaction.destroy({
             where: {
-                id: id
+                UserId: idUser,
+                ProductId: idProduct
             }
         })
         .then(data => {
